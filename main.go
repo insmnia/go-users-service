@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/insmnia/go-users-service/database"
 	"log"
 	"os"
 	"os/signal"
@@ -10,7 +11,8 @@ import (
 
 func main() {
 	app := gin.Default()
-	log.Print("Service started")
+	database.InitDB()
+
 	go func() {
 		err := app.Run()
 		if err != nil {
