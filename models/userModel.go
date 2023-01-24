@@ -1,12 +1,19 @@
 package models
 
+import (
+	"github.com/google/uuid"
+)
+
 type User struct {
-	ID       string `json:"id" gorm:"primary_key"`
-	Username string `json:"username" gorm:"unique_index"`
-	Password string `json:"password" gorm:"not null"`
+	UUID      uuid.UUID `json:"uuid" gorm:"type:uuid;primary_key;primaryKey"`
+	Username  string    `json:"username" gorm:"unique_index"`
+	Password  string    `json:"password" gorm:"not null"`
+	IsDeleted bool      `json:"isDeleted"`
 }
 
-type CreateUserResponse struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
+// TODO: fix trigger
+// BeforeCreate `Before insert` trigger analogue
+//func (u *User) BeforeCreate(tx *gorm.DB) error {
+//	u.UUID = uuid.New()
+//	return nil
+//}

@@ -2,8 +2,9 @@ package database
 
 import (
 	"github.com/insmnia/go-users-service/core/config"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/insmnia/go-users-service/models"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 )
 
@@ -14,7 +15,7 @@ func InitDB() *gorm.DB {
 	if err != nil {
 		log.Fatalf("Couldn't read database config due to %s", err.Error())
 	}
-	db, err := gorm.Open("postgres", dbConfig.ToConnectionString())
+	db, err := gorm.Open(postgres.Open(dbConfig.ToConnectionString()), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Couldn't connect to database due to %s", err.Error())
 	}
@@ -24,4 +25,11 @@ func InitDB() *gorm.DB {
 
 func GetDB() *gorm.DB {
 	return DB
+}
+
+func MigrateModels() {
+	err := DB.AutoMigrate(&models.User{})
+	if err != nil {
+		return
+	}
 }

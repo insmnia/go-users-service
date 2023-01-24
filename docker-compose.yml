@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     container_name: gin-app
     restart: always
+#    volumes:
+#      - .:/go/app
     environment:
       - DB_USER
       - DB_PASS=43320
@@ -18,7 +20,7 @@ services:
         condition: service_started
 
   db:
-    image: postgres:13-alpine
+    image: postgres:14
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
