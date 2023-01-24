@@ -8,16 +8,15 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 # Change working directory
-WORKDIR $GOPATH/src/goginapp/
+WORKDIR $GOPATH/app
 
 # Install dependencies
 ENV GO111MODULE=on
 COPY . ./
-RUN if test -e "go.mod"; then go build ./...; fi
 
 ENV PORT 8080
 ENV GIN_MODE release
 EXPOSE 8080
 
 RUN go build -o app
-CMD ["./app"]
+CMD ["/app"]
