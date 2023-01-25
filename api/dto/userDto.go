@@ -1,7 +1,7 @@
 package dto
 
 import (
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 	"time"
 )
 
@@ -10,9 +10,12 @@ type CreateUserRequest struct {
 	Password       string `json:"password"`
 	PasswordRepeat string `json:"passwordRepeat"`
 }
+type UpdateUserRequest struct {
+	Username string `json:"username"`
+}
 
-type CreateUserResponse struct {
+type UserResponse struct {
 	ID        uuid.UUID `json:"id"`
-	Username  uuid.UUID `json:"username"`
+	Username  string    `json:"username"`
 	CreatedAt time.Time `json:"createdAt"`
 }

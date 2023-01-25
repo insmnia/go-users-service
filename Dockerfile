@@ -19,4 +19,4 @@ ENV GIN_MODE release
 EXPOSE 8080
 
 RUN go build -o app
-CMD ["/app"]
+CMD ["./app"]

@@ -8,27 +8,22 @@ import (
 	"log"
 )
 
-var DB *gorm.DB
-
-func InitDB() *gorm.DB {
+func InitDB() (*gorm.DB, error) {
 	dbConfig, err := config.LoadDatabaseConfig(".")
 	if err != nil {
 		log.Fatalf("Couldn't read database config due to %s", err.Error())
+		return nil, err
 	}
 	db, err := gorm.Open(postgres.Open(dbConfig.ToConnectionString()), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Couldn't connect to database due to %s", err.Error())
+		return nil, err
 	}
-	DB = db
-	return DB
+	return db, nil
 }
 
-func GetDB() *gorm.DB {
-	return DB
-}
-
-func MigrateModels() {
-	err := DB.AutoMigrate(&models.User{})
+func MigrateModels(db *gorm.DB) {
+	err := db.AutoMigrate(&models.User{})
 	if err != nil {
 		return
 	}
