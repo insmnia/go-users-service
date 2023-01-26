@@ -1,4 +1,4 @@
 .idea
 *.xml
-db.env
+env/db.env
 *.env

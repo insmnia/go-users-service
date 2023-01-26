@@ -25,7 +25,7 @@ services:
     expose:
       - 5432
     env_file:
-      - db.env
+      - env/db.env
     ports:
       - "5432:5432"
 

@@ -50,3 +50,9 @@ func (repo *UserRepository) GetForceByName(name string) (models.User, error) {
 	result := repo.db.Unscoped().Where(models.User{Username: name}).First(&user)
 	return user, result.Error
 }
+
+func (repo *UserRepository) GetByName(name string) (models.User, error) {
+	var user models.User
+	result := repo.db.Where(models.User{Username: name}).First(&user)
+	return user, result.Error
+}
