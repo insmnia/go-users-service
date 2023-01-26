@@ -6,12 +6,12 @@ import (
 )
 
 type CreateUserRequest struct {
-	Username       string `json:"username"`
-	Password       string `json:"password"`
-	PasswordRepeat string `json:"passwordRepeat"`
+	Username       string `json:"username" binding:"required"`
+	Password       string `json:"password" binding:"required"`
+	PasswordRepeat string `json:"passwordRepeat" binding:"required"`
 }
 type UpdateUserRequest struct {
-	Username string `json:"username"`
+	Username string `json:"username" binding:"required"`
 }
 
 type UserResponse struct {

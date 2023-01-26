@@ -10,7 +10,6 @@ import (
 	"github.com/insmnia/go-users-service/models"
 	"github.com/insmnia/go-users-service/repository"
 	"go.uber.org/zap"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
@@ -21,57 +20,6 @@ type UserService struct {
 
 func NewUserService(userRepository *repository.UserRepository, logger *zap.SugaredLogger) *UserService {
 	return &UserService{userRepository, logger}
-}
-
-func (service *UserService) GenerateHashPassword(password string) (string, error) {
-	// TODO: move cost to env variable
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
-	return string(hashedPassword), err
-}
-
-func (service *UserService) CheckHashPassword(password, hashedPassword string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	return err != nil
-}
-
-func (service *UserService) Create(ctx *gin.Context) {
-	var input models.CreateUser
-
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		service.logger.Errorf("Error while parsing body %s", err)
-		bodyError := errors.ParseBodyError{Msg: "Couldn't parse body"}
-		bodyError.Raise(ctx)
-		return
-	}
-	if errs := validators.ValidateStruct(input); errs != nil {
-		service.logger.Errorf("Couldn't validate input structure: %v", errs)
-		validationError := errors.ValidateBodyError{Errors: errs}
-		validationError.Raise(ctx)
-		return
-	}
-	if _, err := service.Repo.GetForceByName(input.Username); err == nil {
-		ctx.JSON(http.StatusBadRequest, "User with such username already exists!")
-		return
-	}
-	hashedPassword, err := service.GenerateHashPassword(input.Password)
-	if err != nil {
-		service.logger.Errorf("Couldn't generate password due to: %s", err)
-		ctx.Status(http.StatusInternalServerError)
-		return
-	}
-
-	user, err := service.Repo.Create(models.User{Username: input.Username, Password: hashedPassword})
-	if err != nil {
-		service.logger.Errorf("Couldn't create user due to: %s", err)
-		ctx.Status(http.StatusInternalServerError)
-		return
-	}
-
-	ctx.JSON(201, dto.UserResponse{
-		ID:        user.UUID,
-		Username:  user.Username,
-		CreatedAt: user.CreatedAt,
-	})
 }
 
 func (service *UserService) Get(ctx *gin.Context) {

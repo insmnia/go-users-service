@@ -2,9 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/insmnia/go-users-service/api/routers"
+	"github.com/insmnia/go-users-service/api"
 	"github.com/insmnia/go-users-service/database"
-	"github.com/insmnia/go-users-service/repository"
 	"go.uber.org/zap"
 	"log"
 	"os"
@@ -18,6 +17,8 @@ func main() {
 	if err != nil {
 		return
 	}
+	database.MigrateModels(db)
+
 	zapLogger, _ := zap.NewProduction()
 	defer func(logger *zap.Logger) {
 		err := logger.Sync()
@@ -27,9 +28,7 @@ func main() {
 	}(zapLogger)
 	logger := zapLogger.Sugar()
 
-	database.MigrateModels(db)
-	routes := routers.NewUserRoutes(repository.NewUserRepository(db), logger)
-	routes.InitRoutes(app.Group("/api/users"))
+	api.SetUpRoutes(app, db, logger)
 	log.Print("Server started")
 	go func() {
 		err := app.Run()

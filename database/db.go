@@ -9,7 +9,7 @@ import (
 )
 
 func InitDB() (*gorm.DB, error) {
-	dbConfig, err := config.LoadDatabaseConfig(".")
+	dbConfig, err := config.LoadDatabaseConfig("./env")
 	if err != nil {
 		log.Fatalf("Couldn't read database config due to %s", err.Error())
 		return nil, err
