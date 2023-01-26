@@ -11,11 +11,6 @@ type User struct {
 	Username string    `json:"username" gorm:"uniqueIndex"`
 	Password string    `json:"password" gorm:"not null"`
 }
-
-type CreateUser struct {
-	Username string
-	Password string
-}
 type UpdateUser struct {
 	Username string
 }

@@ -2,7 +2,7 @@ package errors
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/insmnia/go-users-service/core/validators"
+	"github.com/insmnia/go-users-service/pkg/validators"
 	"net/http"
 )
 

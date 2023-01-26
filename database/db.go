@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/insmnia/go-users-service/core/config"
+	"github.com/insmnia/go-users-service/config"
 	"github.com/insmnia/go-users-service/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

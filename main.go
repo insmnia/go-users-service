@@ -1,10 +1,7 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/insmnia/go-users-service/api"
-	"github.com/insmnia/go-users-service/database"
-	"go.uber.org/zap"
+	"github.com/insmnia/go-users-service/cmd"
 	"log"
 	"os"
 	"os/signal"
@@ -12,23 +9,11 @@ import (
 )
 
 func main() {
-	app := gin.Default()
-	db, err := database.InitDB()
+	app, err := cmd.InitApp()
 	if err != nil {
-		return
+		log.Fatalf("Cannot init app due to %s", err.Error())
 	}
-	database.MigrateModels(db)
 
-	zapLogger, _ := zap.NewProduction()
-	defer func(logger *zap.Logger) {
-		err := logger.Sync()
-		if err != nil {
-			return
-		}
-	}(zapLogger)
-	logger := zapLogger.Sugar()
-
-	api.SetUpRoutes(app, db, logger)
 	log.Print("Server started")
 	go func() {
 		err := app.Run()
