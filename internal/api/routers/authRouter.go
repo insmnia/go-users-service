@@ -2,8 +2,8 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	r "github.com/insmnia/go-users-service/repository"
-	"github.com/insmnia/go-users-service/service"
+	r "github.com/insmnia/go-users-service/internal/repository"
+	"github.com/insmnia/go-users-service/internal/service"
 	"go.uber.org/zap"
 )
 

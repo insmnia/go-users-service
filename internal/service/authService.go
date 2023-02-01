@@ -2,12 +2,12 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/insmnia/go-users-service/api/dto"
-	"github.com/insmnia/go-users-service/core/errors"
-	"github.com/insmnia/go-users-service/core/utils"
-	"github.com/insmnia/go-users-service/core/validators"
+	dto2 "github.com/insmnia/go-users-service/internal/api/dto"
+	"github.com/insmnia/go-users-service/internal/repository"
 	"github.com/insmnia/go-users-service/models"
-	"github.com/insmnia/go-users-service/repository"
+	"github.com/insmnia/go-users-service/pkg/errors"
+	"github.com/insmnia/go-users-service/pkg/utils"
+	"github.com/insmnia/go-users-service/pkg/validators"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -48,7 +48,7 @@ func (service *AuthService) GenerateTokens(username string, userId string) (acce
 }
 
 func (service *AuthService) Create(ctx *gin.Context) {
-	var input dto.CreateUserRequest
+	var input dto2.CreateUserRequest
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		service.logger.Errorf("Error while parsing body %s", err)
@@ -84,7 +84,7 @@ func (service *AuthService) Create(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(201, dto.UserResponse{
+	ctx.JSON(201, dto2.UserResponse{
 		ID:        user.UUID,
 		Username:  user.Username,
 		CreatedAt: user.CreatedAt,
@@ -92,7 +92,7 @@ func (service *AuthService) Create(ctx *gin.Context) {
 }
 
 func (service *AuthService) Authorize(ctx *gin.Context) {
-	var input dto.SignInRequest
+	var input dto2.SignInRequest
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		service.logger.Errorf("Error while parsing body %s", err)
 		bodyError := errors.ParseBodyError{Msg: "Couldn't parse body"}
@@ -130,7 +130,7 @@ func (service *AuthService) Authorize(ctx *gin.Context) {
 		false,
 		true,
 	)
-	ctx.JSON(200, dto.SignInResponse{
+	ctx.JSON(200, dto2.SignInResponse{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	})
@@ -162,7 +162,7 @@ func (service *AuthService) RefreshToken(ctx *gin.Context) {
 		false,
 		true,
 	)
-	ctx.JSON(200, dto.SignInResponse{
+	ctx.JSON(200, dto2.SignInResponse{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	})

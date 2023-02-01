@@ -2,7 +2,7 @@ package middlewares
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/insmnia/go-users-service/core/utils"
+	"github.com/insmnia/go-users-service/pkg/utils"
 	"strings"
 )
 
